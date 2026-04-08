@@ -1,13 +1,16 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js"
 
+import content from "@/constants/content.json"
+
 function createIridescentEquirectTexture(): THREE.CanvasTexture {
   const canvas = document.createElement("canvas")
-  canvas.width = 2048
-  canvas.height = 1024
+  /** 1024×512: suficiente para PMREM; menos trabajo en CPU/GPU que 2048×1024 */
+  canvas.width = 1024
+  canvas.height = 512
   const ctx = canvas.getContext("2d")
   if (!ctx) {
     const fallback = new THREE.CanvasTexture(canvas)
@@ -15,14 +18,17 @@ function createIridescentEquirectTexture(): THREE.CanvasTexture {
     return fallback
   }
 
+  /** Misma composición que a 2048×1024, pero raster a mitad de píxeles */
+  ctx.scale(0.5, 0.5)
+
   ctx.fillStyle = "#080b12"
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillRect(0, 0, 2048, 1024)
   const bgGrad = ctx.createRadialGradient(1440, 420, 120, 1024, 540, 920)
   bgGrad.addColorStop(0, "rgba(22,30,52,0.95)")
   bgGrad.addColorStop(0.5, "rgba(8,12,20,0.85)")
   bgGrad.addColorStop(1, "rgba(5,7,12,1)")
   ctx.fillStyle = bgGrad
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillRect(0, 0, 2048, 1024)
   ctx.globalCompositeOperation = "screen"
 
   const drawRibbon = (
@@ -103,7 +109,7 @@ function createIridescentEquirectTexture(): THREE.CanvasTexture {
 }
 
 function createBladeGeometry(): THREE.BufferGeometry {
-  return new RoundedBoxGeometry(1.25, 1.25, 1.25, 12, 0.18)
+  return new RoundedBoxGeometry(1.25, 1.25, 1.25, 8, 0.18)
 }
 
 function createBladeCrystal(
@@ -125,6 +131,7 @@ function createBladeCrystal(
 export function IridescentDiamond() {
   const containerRef = useRef<HTMLDivElement>(null)
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
+  const [modelReady, setModelReady] = useState(false)
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -142,9 +149,12 @@ export function IridescentDiamond() {
       alpha: true,
       premultipliedAlpha: false,
       powerPreference: "high-performance",
+      stencil: false,
+      depth: true,
     })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    /** Cap DPR: MeshPhysical + transmisión es caro; 1.5 suele verse igual de nítido */
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     renderer.setClearColor(0x000000, 0)
     renderer.setClearAlpha(0)
     renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -153,9 +163,15 @@ export function IridescentDiamond() {
     const canvas = renderer.domElement
     canvas.style.background = "transparent"
     canvas.style.display = "block"
+    canvas.style.position = "absolute"
+    canvas.style.inset = "0"
+    canvas.style.width = "100%"
+    canvas.style.height = "100%"
+    canvas.style.zIndex = "1"
     container.appendChild(canvas)
 
     const pmremGenerator = new THREE.PMREMGenerator(renderer)
+    pmremGenerator.compileEquirectangularShader()
     const envTexture = createIridescentEquirectTexture()
     const envRT = pmremGenerator.fromEquirectangular(envTexture)
     scene.environment = envRT.texture
@@ -220,11 +236,31 @@ export function IridescentDiamond() {
     }
     window.addEventListener("mousemove", handleMouseMove)
 
+    let shouldRender = true
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        shouldRender = entry.isIntersecting && entry.intersectionRatio > 0
+      },
+      { root: null, rootMargin: "80px", threshold: 0 }
+    )
+    intersectionObserver.observe(container)
+
+    const onVisibility = () => {
+      if (document.hidden) shouldRender = false
+      else {
+        const r = container.getBoundingClientRect()
+        shouldRender = r.bottom > 0 && r.top < window.innerHeight
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibility)
+
     let animationId: number
     let time = 0
 
     const animate = () => {
       animationId = requestAnimationFrame(animate)
+      if (!shouldRender) return
+
       time += 0.016
 
       mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.04
@@ -238,6 +274,10 @@ export function IridescentDiamond() {
       renderer.render(scene, camera)
     }
 
+    /** Primer frame en el hilo principal: el modelo ya está listo para mostrarse */
+    renderer.render(scene, camera)
+    setModelReady(true)
+
     animate()
 
     const handleResize = () => {
@@ -250,6 +290,8 @@ export function IridescentDiamond() {
     window.addEventListener("resize", handleResize)
 
     return () => {
+      intersectionObserver.disconnect()
+      document.removeEventListener("visibilitychange", onVisibility)
       cancelAnimationFrame(animationId)
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("resize", handleResize)
@@ -270,9 +312,20 @@ export function IridescentDiamond() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 h-full min-h-[280px] w-full bg-transparent"
+      className="absolute inset-0 h-full min-h-[280px] w-full bg-black"
       style={{ zIndex: 1 }}
       aria-hidden
-    />
+    >
+      <img
+        src={content.hero.placeholderImage}
+        alt=""
+        decoding="async"
+        fetchPriority="high"
+        className={
+          "pointer-events-none absolute inset-0 z-2 h-full w-full object-contain object-center transition-opacity duration-500 ease-out " +
+          (modelReady ? "opacity-0" : "opacity-100")
+        }
+      />
+    </div>
   )
 }

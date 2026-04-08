@@ -3,8 +3,10 @@
 import { useState } from "react"
 
 import { siteConfig } from "@/config/site"
+import content from "@/constants/content.json"
 
 const { navLinks, name, ctaHref, ctaLabel } = siteConfig
+const { toggleMenuAria } = content.nav
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -45,7 +47,7 @@ export function Navbar() {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden text-white p-2"
-          aria-label="Toggle menu"
+          aria-label={toggleMenuAria}
         >
           <svg
             className="w-6 h-6"

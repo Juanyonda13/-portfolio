@@ -103,7 +103,8 @@ function makeGeometry(variant: ExperienceIconVariant): THREE.BufferGeometry {
     case "diamond":
       return new THREE.OctahedronGeometry(0.72, 1)
     case "ring":
-      return new THREE.TorusKnotGeometry(0.44, 0.14, 140, 24)
+      /** Menos segmentos: ícono ~44px; 140×24 era excesivo para el tamaño en pantalla */
+      return new THREE.TorusKnotGeometry(0.44, 0.14, 64, 12)
     case "crystal":
       return new THREE.DodecahedronGeometry(0.68, 0)
     default:
@@ -125,12 +126,13 @@ export function Experience3DIcon({ variant, className = "" }: Experience3DIconPr
     camera.position.set(0, 0, 3.5)
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: false,
       alpha: true,
       premultipliedAlpha: false,
       powerPreference: "high-performance",
+      stencil: false,
     })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25))
     renderer.setSize(size, size)
     renderer.setClearColor(0x000000, 0)
     renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -140,6 +142,7 @@ export function Experience3DIcon({ variant, className = "" }: Experience3DIconPr
     container.appendChild(renderer.domElement)
 
     const pmrem = new THREE.PMREMGenerator(renderer)
+    pmrem.compileEquirectangularShader()
     const envTexture = createMiniEnvTexture(variant)
     const envRT = pmrem.fromEquirectangular(envTexture)
     scene.environment = envRT.texture
@@ -189,9 +192,28 @@ export function Experience3DIcon({ variant, className = "" }: Experience3DIconPr
     const spin = variant === "ring" ? 0.018 : 0.013
     const wobble = variant === "crystal" ? 0.95 : 0.6
     let raf = 0
+    let shouldRender = true
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        shouldRender = entry.isIntersecting && entry.intersectionRatio > 0
+      },
+      { rootMargin: "48px", threshold: 0 }
+    )
+    io.observe(container)
+
+    const onVisibility = () => {
+      if (document.hidden) shouldRender = false
+      else {
+        const r = container.getBoundingClientRect()
+        shouldRender = r.bottom > 0 && r.top < window.innerHeight
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibility)
 
     const animate = () => {
       raf = requestAnimationFrame(animate)
+      if (!shouldRender) return
       frame += 1
       mesh.rotation.y += spin
       mesh.rotation.x = -0.2 + Math.sin(frame * 0.016) * 0.16 * wobble
@@ -201,6 +223,8 @@ export function Experience3DIcon({ variant, className = "" }: Experience3DIconPr
     animate()
 
     return () => {
+      io.disconnect()
+      document.removeEventListener("visibilitychange", onVisibility)
       cancelAnimationFrame(raf)
       geometry.dispose()
       material.dispose()

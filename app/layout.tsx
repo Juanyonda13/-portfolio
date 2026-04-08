@@ -4,10 +4,11 @@ import { Analytics } from '@vercel/analytics/next'
 import { siteConfig } from '@/config/site'
 import './globals.css'
 
-const syne = Syne({ 
+const syne = Syne({
   subsets: ["latin"],
-  variable: '--font-syne',
-  weight: ['400', '500', '600', '700', '800']
+  variable: "--font-syne",
+  /** 400 cuerpo, 600 semibold, 700 bold, 800 extrabold — sin 500 para menos bytes */
+  weight: ["400", "600", "700", "800"],
 })
 
 const spaceMono = Space_Mono({ 
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${syne.variable} ${spaceMono.variable}`}>
+    <html lang={siteConfig.lang} className={`${syne.variable} ${spaceMono.variable}`}>
       <body className="font-sans antialiased bg-black text-white">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
