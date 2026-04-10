@@ -51,15 +51,17 @@
     "items": [
       {
         "number": "01",
-        "title": "FACIAL RECOGNITION SYSTEM",
-        "description": "Anti-counterfeiting using AWS Rekognition + Liveness Detection",
-        "tags": ["AWS", "Node.js", "TypeScript", "AI"]
+        "title": "QUANT AI MULTI-AGENT",
+        "description": "Quant research multi-agent pipeline: Claude API tool_use, yfinance ingestion, Pydantic contracts between agents, walk-forward CV, Parquet + JSON logs — Python.",
+        "tags": ["Python", "Claude", "Agents", "Quant"],
+        "href": "https://github.com/Juanyonda13/quant-ai-cloude"
       },
       {
         "number": "02",
-        "title": "AGRICULTURAL ERP",
-        "description": "Full ERP with IoT sensors for real-time crop monitoring",
-        "tags": ["Node.js", "TypeScript", "IoT", "MySQL"]
+        "title": "HOUSE PRICE PREDICTOR",
+        "description": "Flask web app to estimate home prices: multiple OLS regression (statsmodels), statistical analysis, 95% confidence intervals, REST API, interactive Leaflet map — Saratoga Houses dataset.",
+        "tags": ["Python", "Flask", "OLS", "Stats"],
+        "href": "https://github.com/Juanyonda13/HousePredictor"
       },
       {
         "number": "03",
