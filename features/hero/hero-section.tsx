@@ -28,7 +28,7 @@ const titleLine = hero.titleSegments.join("\u00A0 | \u00A0")
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-[100dvh] min-h-screen flex-col overflow-x-hidden bg-black">
+    <section className="relative flex min-h-dvh flex-col overflow-x-hidden bg-black">
       <div className="pointer-events-none absolute inset-0 z-0">
         <div
           className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[64px_64px] opacity-[0.03]"

@@ -28,7 +28,7 @@ export function ExperienceSection() {
 
           <div className="space-y-10 sm:space-y-14">
             {experience.items.map((exp) => (
-              <div key={exp.company} className="relative pl-[4.25rem] sm:pl-20">
+              <div key={exp.company} className="relative pl-17 sm:pl-20">
                 <div className="absolute left-0 top-0">
                   <Experience3DIcon variant={exp.iconVariant as ExperienceIconVariant} />
                 </div>
