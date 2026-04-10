@@ -47,13 +47,13 @@ const capabilityIcons: Record<string, ReactNode> = {
 
 export function AISection() {
   return (
-    <section id="ai" className="py-32 px-6 md:px-12 bg-black">
-      <div className="max-w-7xl mx-auto">
-        <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[rgba(255,255,255,0.38)] block">
+    <section id="ai" className="section-y section-x bg-black">
+      <div className="mx-auto max-w-7xl">
+        <span className="block font-mono text-[10px] uppercase tracking-[0.28em] text-[rgba(255,255,255,0.38)] sm:text-[11px] sm:tracking-[0.3em]">
           {ai.label}
         </span>
 
-        <h2 className="mt-6 mb-16 font-sans text-[clamp(36px,6vw,56px)] font-extrabold uppercase leading-none tracking-[-0.02em]">
+        <h2 className="mb-10 mt-5 font-sans text-[clamp(1.75rem,6.5vw,3.5rem)] font-extrabold uppercase leading-[1.05] tracking-[-0.02em] sm:mb-16 sm:mt-6 sm:leading-none">
           {ai.titleLines.map((line, i) => (
             <span key={line}>
               {i > 0 ? <br /> : null}
@@ -64,28 +64,28 @@ export function AISection() {
           ))}
         </h2>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
           {ai.capabilities.map((cap) => (
             <div
               key={cap.id}
-              className="border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)] p-8 transition-all duration-300 hover:border-[rgba(255,255,255,0.25)] hover:bg-[rgba(255,255,255,0.04)]"
+              className="border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)] p-6 transition-all duration-300 hover:border-[rgba(255,255,255,0.25)] hover:bg-[rgba(255,255,255,0.04)] sm:p-8"
             >
-              <div className="mb-5 text-white">{capabilityIcons[cap.id]}</div>
+              <div className="mb-4 text-white sm:mb-5">{capabilityIcons[cap.id]}</div>
 
-              <h3 className="mb-3 font-sans text-[14px] font-bold uppercase tracking-widest">
+              <h3 className="mb-2 font-sans text-[13px] font-bold uppercase tracking-widest sm:mb-3 sm:text-[14px]">
                 <ScrollRevealText as="span" className="block" fromMuted="rgba(255,255,255,0.35)">
                   {cap.title}
                 </ScrollRevealText>
               </h3>
 
-              <p className="font-mono text-[13px] leading-[1.6] text-[rgba(255,255,255,0.45)]">
+              <p className="font-mono text-[12px] leading-[1.65] text-[rgba(255,255,255,0.45)] sm:text-[13px] sm:leading-[1.6]">
                 {cap.description}
               </p>
             </div>
           ))}
         </div>
 
-        <p className="mt-10 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-[rgba(255,255,255,0.3)]">
+        <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-[rgba(255,255,255,0.3)] sm:mt-10 sm:text-[11px] sm:tracking-[0.2em]">
           {ai.footerNote}
         </p>
       </div>

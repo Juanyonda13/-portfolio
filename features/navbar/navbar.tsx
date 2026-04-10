@@ -12,18 +12,18 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 py-6">
-      <div className="flex items-center justify-between">
+    <nav className="fixed inset-x-0 top-0 z-[100] box-border w-full max-w-full overflow-x-hidden border-b border-transparent bg-black/80 px-4 py-4 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-md supports-[backdrop-filter]:bg-black/60 sm:px-6 md:px-10 md:py-6 lg:px-12">
+      <div className="mx-auto flex w-full min-w-0 max-w-[1600px] items-center justify-between gap-3">
         {/* Logo - Syne Extra Bold */}
-        <a 
-          href="#" 
-          className="font-sans font-extrabold text-[20px] tracking-[0.15em] uppercase text-white"
+        <a
+          href="#"
+          className="min-w-0 shrink font-sans text-[clamp(16px,4.5vw,20px)] font-extrabold uppercase tracking-[0.12em] text-white sm:tracking-[0.15em]"
         >
           {name}
         </a>
 
         {/* Desktop Nav - Space Mono */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex md:items-center md:gap-6 lg:gap-10">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -45,8 +45,10 @@ export function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-white p-2"
+          className="inline-flex shrink-0 min-h-11 min-w-11 items-center justify-center rounded-md text-white md:hidden"
+          aria-expanded={isOpen}
           aria-label={toggleMenuAria}
         >
           <svg
@@ -76,14 +78,14 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-black border-t border-[rgba(255,255,255,0.1)] mt-6 pt-6">
-          <div className="flex flex-col gap-6">
+        <div className="mt-4 max-w-full overflow-x-hidden border-t border-[rgba(255,255,255,0.1)] pt-4 md:hidden">
+          <div className="flex max-h-[min(70vh,calc(100dvh-8rem))] min-w-0 flex-col gap-1 overflow-x-hidden overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)]">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="font-mono text-[12px] uppercase tracking-[0.1em] text-[rgba(255,255,255,0.7)] hover:text-white transition-colors"
+                className="min-h-12 max-w-full break-words rounded-md px-2 py-3 font-mono text-[12px] uppercase tracking-[0.1em] text-[rgba(255,255,255,0.85)] transition-colors active:bg-white/5"
               >
                 {link.label}
               </a>
@@ -91,7 +93,7 @@ export function Navbar() {
             <a
               href={ctaHref}
               onClick={() => setIsOpen(false)}
-              className="font-sans font-bold text-[13px] uppercase tracking-[0.1em] px-6 py-3 border border-[rgba(255,255,255,0.2)] text-[rgba(255,255,255,0.7)] w-fit"
+              className="mt-2 flex min-h-12 w-full max-w-full min-w-0 items-center justify-center rounded-md border border-[rgba(255,255,255,0.25)] px-4 py-3 text-center font-sans text-[13px] font-bold uppercase tracking-[0.1em] text-white"
             >
               {ctaLabel}
             </a>

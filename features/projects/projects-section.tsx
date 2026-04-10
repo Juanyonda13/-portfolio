@@ -7,13 +7,13 @@ const { projects } = content
 
 export function ProjectsSection() {
   return (
-    <section id="projects" className="py-32 px-6 md:px-12 bg-black">
-      <div className="max-w-7xl mx-auto">
-        <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[rgba(255,255,255,0.38)] block">
+    <section id="projects" className="section-y section-x bg-black">
+      <div className="mx-auto max-w-7xl">
+        <span className="block font-mono text-[10px] uppercase tracking-[0.28em] text-[rgba(255,255,255,0.38)] sm:text-[11px] sm:tracking-[0.3em]">
           {projects.label}
         </span>
 
-        <h2 className="font-sans text-[clamp(52px,10.8vw,160px)] font-semibold uppercase leading-none tracking-[-0.02em] mt-6 mb-16">
+        <h2 className="mt-5 font-sans text-[clamp(2.25rem,11vw,10rem)] font-semibold uppercase leading-[0.95] tracking-[-0.02em] sm:mt-6 sm:leading-none lg:text-[clamp(52px,10.8vw,160px)] mb-10 sm:mb-16">
           <ScrollRevealText as="span" className="block" fromMuted="rgba(255,255,255,0.35)">
             {projects.title}
           </ScrollRevealText>
@@ -23,39 +23,41 @@ export function ProjectsSection() {
           {projects.items.map((project, index) => (
             <div
               key={project.number}
-              className={`group flex flex-col md:flex-row items-start md:items-center gap-6 py-8 border-b border-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.02)] transition-all cursor-pointer px-4 -mx-4 ${
+              className={`group flex flex-col gap-5 border-b border-[rgba(255,255,255,0.1)] py-7 transition-all hover:bg-[rgba(255,255,255,0.02)] sm:gap-6 sm:py-8 md:flex-row md:items-start md:gap-6 ${
                 index === 0 ? "border-t border-[rgba(255,255,255,0.1)]" : ""
-              }`}
+              } -mx-1 cursor-pointer rounded-lg px-3 sm:-mx-4 sm:px-4`}
             >
-              <span className="font-mono text-[48px] font-bold text-[rgba(255,255,255,0.1)] w-24 shrink-0">
+              <span className="shrink-0 font-mono text-[clamp(2rem,8vw,3rem)] font-bold leading-none text-[rgba(255,255,255,0.1)] md:w-24 md:text-[48px]">
                 {project.number}
               </span>
 
-              <div className="flex-1">
-                <h3 className="font-sans text-[24px] md:text-[32px] font-extrabold uppercase tracking-tight">
-                  <ScrollRevealText as="span" className="block" fromMuted="rgba(255,255,255,0.35)">
-                    {project.title}
-                  </ScrollRevealText>
-                </h3>
-                <p className="font-mono text-[13px] text-[rgba(255,255,255,0.45)] mt-2">
-                  {project.description}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-6">
-                <div className="hidden md:flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono px-3 py-1 text-[10px] uppercase tracking-widest border border-[rgba(255,255,255,0.2)] text-[rgba(255,255,255,0.5)]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:items-start md:gap-8 lg:gap-10">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-sans text-[clamp(1.05rem,4vw,2rem)] font-extrabold uppercase tracking-tight md:text-[24px] lg:text-[32px]">
+                    <ScrollRevealText as="span" className="block" fromMuted="rgba(255,255,255,0.35)">
+                      {project.title}
+                    </ScrollRevealText>
+                  </h3>
+                  <p className="mt-2 font-mono text-[12px] leading-relaxed text-[rgba(255,255,255,0.45)] sm:text-[13px]">
+                    {project.description}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="border border-[rgba(255,255,255,0.2)] px-2.5 py-1 font-mono text-[9px] uppercase tracking-widest text-[rgba(255,255,255,0.5)] sm:px-3 sm:text-[10px]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <span className="text-[20px] text-white opacity-30 group-hover:opacity-100 group-hover:translate-x-2 transition-all">
-                  →
-                </span>
+
+                <div className="flex shrink-0 items-center justify-end md:pt-1">
+                  <span className="text-lg text-white opacity-30 transition-all group-hover:translate-x-2 group-hover:opacity-100 sm:text-[20px]">
+                    →
+                  </span>
+                </div>
               </div>
             </div>
           ))}

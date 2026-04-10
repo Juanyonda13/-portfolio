@@ -25,9 +25,28 @@
   * {
     @apply border-[rgba(255,255,255,0.1)] outline-none;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
   body {
     @apply bg-black text-white;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    overflow-x: hidden;
+    max-width: 100%;
   }
+}
+
+/** Espaciado vertical típico de secciones: más compacto en móvil */
+@utility section-y {
+  @apply py-16 sm:py-24 lg:py-32;
+}
+
+@utility section-x {
+  @apply px-4 sm:px-6 md:px-10 lg:px-12;
 }
 
 /* Hero Word Entrance Animation */

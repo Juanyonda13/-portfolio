@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Syne, Space_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { siteConfig } from '@/config/site'
@@ -22,6 +22,12 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={siteConfig.lang} className={`${syne.variable} ${spaceMono.variable}`}>
-      <body className="font-sans antialiased bg-black text-white">
+      <body className="font-sans antialiased bg-black text-white overflow-x-hidden max-w-full">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

@@ -65,9 +65,9 @@ function StatCard({ value, label, delay }: StatCardProps) {
   return (
     <div
       ref={ref}
-      className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.1)] p-7 flex flex-col hover:border-[rgba(255,255,255,0.25)] hover:bg-[rgba(255,255,255,0.04)] transition-all duration-300"
+      className="flex flex-col border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)] p-5 transition-all duration-300 hover:border-[rgba(255,255,255,0.25)] hover:bg-[rgba(255,255,255,0.04)] sm:p-7"
     >
-      <span className="font-sans text-[56px] font-extrabold text-white leading-none">
+      <span className="font-sans text-[clamp(2.5rem,12vw,3.5rem)] font-extrabold leading-none text-white sm:text-[56px]">
         {count}
         {suffix}
       </span>
@@ -83,19 +83,19 @@ const ABOUT_TITLE_MUTED = "rgba(168, 200, 240, 0.22)"
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-32 px-6 md:px-12 bg-black">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row gap-16">
+    <section id="about" className="section-y section-x bg-black">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <div className="lg:w-[60%]">
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[rgba(255,255,255,0.38)]">
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[rgba(255,255,255,0.38)] sm:text-[11px] sm:tracking-[0.3em]">
               {about.label}
             </span>
 
-            <div className="mt-6 mb-8 space-y-0 leading-[0.95]">
+            <div className="mt-5 mb-6 space-y-0 leading-[0.95] sm:mt-6 sm:mb-8">
               {about.headlineWords.map((word, index) => (
                 <div
                   key={index}
-                  className="font-sans text-[clamp(48px,8vw,72px)] font-extrabold uppercase"
+                  className="font-sans text-[clamp(2rem,9vw,4.5rem)] font-extrabold uppercase sm:text-[clamp(48px,8vw,72px)]"
                 >
                   <ScrollRevealText
                     className="block"
@@ -109,13 +109,13 @@ export function AboutSection() {
               ))}
             </div>
 
-            <p className="font-mono text-[13px] text-[rgba(255,255,255,0.45)] leading-[1.8] max-w-[480px]">
+            <p className="max-w-[480px] font-mono text-[12px] leading-[1.75] text-[rgba(255,255,255,0.45)] sm:text-[13px] sm:leading-[1.8]">
               {about.body}
             </p>
           </div>
 
           <div className="lg:w-[40%]">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {about.stats.map((stat) => (
                 <StatCard
                   key={stat.label}
